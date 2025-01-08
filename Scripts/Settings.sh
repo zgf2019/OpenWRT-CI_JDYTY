@@ -2,6 +2,8 @@
 
 #自定义所有设置
 echo "当前网关IP: $WRT_IP"
+# 支持 ** 查找子目录
+shopt -s globstar
 
 
 
@@ -39,6 +41,10 @@ sed -i 's/services/nas/g' $(find ./feeds/luci/applications/luci-app-alist/root/u
 if [[ $WRT_REPO == *"lede"* ]]; then
 	sed -i 's/services/nas/g' $(find ./feeds/luci/applications/luci-app-samba4/root/usr/share/luci/menu.d/ -type f -name "luci-app-samba4.json")
 fi
+
+#移除advancedplus无用功能
+sed -i '/advancedplus\/advancedset/d' $(find ./**/luci-app-advancedplus/luasrc/controller/ -type f -name "advancedplus.lua")
+sed -i '/advancedplus\/advancedipk/d' $(find ./**/luci-app-advancedplus/luasrc/controller/ -type f -name "advancedplus.lua")
 
 
 WRT_IPPART=$(echo $WRT_IP | cut -d'.' -f1-3)
